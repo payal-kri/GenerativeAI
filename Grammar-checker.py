@@ -8,15 +8,24 @@ def correct_grammar(text):
         groq_api_key="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"  # Replace with your actual API key
     )
     
-    prompt = f"Check the grammar of the following text. 
-    If it's correct, return it as is. 
-    If it has grammar mistakes, correct them without 
-    changing the meaning or adding extra words. 
-    Also, list the incorrect words and provide feedback 
-    on what went wrong.\nText: {text}"
+    prompt = f"""Check the grammar of the following text.If it's correct, return it as is.If it has grammar mistakes, correct them without changing the meaning or adding extra words.Also, list the incorrect words and provide feedback on what went wrong.\nText: {text}"""
     
     response = llm.invoke(prompt)  # Get AIMessage object
     corrected_text = response.content  # Extract actual text
+    
+    return corrected_text
+    st.title("Grammar Checker")
+    st.write("Enter the text to check 'grammar'")
+
+    user_text=st.text_area("Enter your text here", height=100)
+    if st.button("Check Grammar"):
+      if user_text.strip():
+        with st.spinner("Checking grammar..."):
+            corrected_text = correct_grammar(user_text)
+            st.subheader("Corrected Text:")
+            st.write(corrected_text)
+    else:
+        st.warning("Please enter some text.")
     
     if corrected_text.strip() == text.strip():
         print("\nSentence is already correct:", text)
